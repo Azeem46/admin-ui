@@ -1,89 +1,70 @@
-UserTable React Application
-Overview
-This React application provides a user management table with features for searching, editing, deleting, and paginating users. It includes responsive design elements to ensure usability across various devices.
+# Getting Started with Create React App
 
-Features
-Search: Filter users by name, email, or role.
-Edit: Update user details in-place.
-Delete: Remove individual or selected users.
-Pagination: Navigate through pages of users.
-Responsive Design: View the table on mobile and desktop devices.
-Prerequisites
-Node.js (>= 14.x)
-npm or yarn
-Installation
-Clone the repository:
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-bash
-Copy code
-git clone https://github.com/yourusername/usertable-react.git
-Navigate into the project directory:
+## Available Scripts
 
-bash
-Copy code
-cd usertable-react
-Install dependencies:
+In the project directory, you can run:
 
-Using npm:
+### `npm start`
 
-bash
-Copy code
-npm install
-Or using yarn:
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-bash
-Copy code
-yarn install
-Usage
-Start the development server:
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-Using npm:
+### `npm test`
 
-bash
-Copy code
-npm start
-Or using yarn:
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-bash
-Copy code
-yarn start
-This will open the application in your default web browser at http://localhost:3000.
+### `npm run build`
 
-Build for production:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Using npm:
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-bash
-Copy code
-npm run build
-Or using yarn:
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-bash
-Copy code
-yarn build
-This will create a build directory with the production-ready files.
+### `npm run eject`
 
-Project Structure
-src/: Contains the React components and styles.
-UserTable.js: Main component for displaying and managing users.
-UserTable.css: Styles for the UserTable component.
-Customization
-To customize the table or add new features:
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-Modify the UserTable.js:
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Adjust the state management and event handlers as needed.
-Update the UserTable.css:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-Change styles to fit your design requirements.
-Contributing
-Fork the repository.
-Create a new branch for your changes.
-Commit your changes.
-Push to the branch.
-Create a pull request describing your changes.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-Acknowledgements
-Thanks to the GeekTrust for providing the sample data used in this project.
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
