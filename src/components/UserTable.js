@@ -1,5 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import "./UserTable.css"; // Ensure you have the correct CSS
+import './UserTable.css'; // Ensure you have the correct CSS
+
+// Constants
+const USERS_PER_PAGE = 10;
+
+// Utility Functions
+const fetchUsersData = async (setUsers, setLoading, setError) => {
+  try {
+    const response = await fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json');
+    const data = await response.json();
+    setUsers(data);
+  } catch (err) {
+    setError('Failed to fetch data');
+  } finally {
+    setLoading(false);
+  }
+};
+
+const paginateUsers = (users, searchTerm, currentPage) => {
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastUser = currentPage * USERS_PER_PAGE;
+  const indexOfFirstUser = indexOfLastUser - USERS_PER_PAGE;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  return { filteredUsers, currentUsers };
+};
+
+const getTotalPages = (filteredUsers) => Math.ceil(filteredUsers.length / USERS_PER_PAGE);
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -12,37 +44,16 @@ const UserTable = () => {
   const [error, setError] = useState(null);
   const [updatePage, setUpdatePage] = useState(false); // Track page update
 
-  const usersPerPage = 10;
-
   useEffect(() => {
-    fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
-      .then(response => response.json())
-      .then(data => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError('Failed to fetch data');
-        setLoading(false);
-      });
+    fetchUsersData(setUsers, setLoading, setError);
   }, []);
 
   useEffect(() => {
     if (updatePage) {
-      const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.role.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      const indexOfLastUser = currentPage * usersPerPage;
-      const indexOfFirstUser = indexOfLastUser - usersPerPage;
-      const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
-      if (currentUsers.length === 0 && totalPages > 1) {
+      const { filteredUsers, currentUsers } = paginateUsers(users, searchTerm, currentPage);
+      if (currentUsers.length === 0 && getTotalPages(filteredUsers) > 1) {
         setCurrentPage(prev => Math.max(prev - 1, 1));
       }
-
       setUpdatePage(false);
     }
   }, [updatePage, users, searchTerm, currentPage]);
@@ -52,17 +63,8 @@ const UserTable = () => {
     setCurrentPage(1); // Reset to the first page on search
   };
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const { filteredUsers, currentUsers } = paginateUsers(users, searchTerm, currentPage);
+  const totalPages = getTotalPages(filteredUsers);
 
   const handleEditClick = (user) => {
     setEditingUserId(user.id);
