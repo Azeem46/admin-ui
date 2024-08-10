@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "./UserTable.css"; 
+import "./UserTable.css"; // Ensure you have the correct CSS
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -10,27 +10,42 @@ const UserTable = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updatePage, setUpdatePage] = useState(false); // Track page update
 
   const usersPerPage = 10;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+    fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
+      .then(response => response.json())
+      .then(data => {
         setUsers(data);
         setLoading(false);
-      } catch (err) {
+      })
+      .catch(err => {
         setError('Failed to fetch data');
         setLoading(false);
-      }
-    };
-
-    fetchData();
+      });
   }, []);
+
+  useEffect(() => {
+    if (updatePage) {
+      const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.role.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      const indexOfLastUser = currentPage * usersPerPage;
+      const indexOfFirstUser = indexOfLastUser - usersPerPage;
+      const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+      if (currentUsers.length === 0 && totalPages > 1) {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+      }
+
+      setUpdatePage(false);
+    }
+  }, [updatePage, users, searchTerm, currentPage]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -57,6 +72,7 @@ const UserTable = () => {
   const handleDeleteClick = (id) => {
     const updatedUsers = users.filter(user => user.id !== id);
     setUsers(updatedUsers);
+    setUpdatePage(true); // Trigger page update
   };
 
   const handleSaveClick = () => {
@@ -70,6 +86,7 @@ const UserTable = () => {
   const handleDeleteSelected = () => {
     const updatedUsers = users.filter(user => !selectedUsers.includes(user.id));
     setUsers(updatedUsers);
+    setUpdatePage(true); // Trigger page update
     setSelectedUsers([]);
   };
 
@@ -156,7 +173,7 @@ const UserTable = () => {
                     type="checkbox"
                     onChange={handleSelectAll}
                     checked={selectedUsers.length === currentUsers.length}
-                    aria-label="Select all on current page"
+                    aria-label="Select all"
                   />
                 </th>
                 <th>Name</th>
@@ -182,7 +199,7 @@ const UserTable = () => {
                         type="text"
                         value={editedUser.name}
                         onChange={e => setEditedUser({ ...editedUser, name: e.target.value })}
-                        aria-label={`Edit name of ${user.name}`}
+                        aria-label={`Edit ${user.name}`}
                       />
                     ) : (
                       user.name
@@ -194,7 +211,7 @@ const UserTable = () => {
                         type="text"
                         value={editedUser.email}
                         onChange={e => setEditedUser({ ...editedUser, email: e.target.value })}
-                        aria-label={`Edit email of ${user.email}`}
+                        aria-label={`Edit ${user.email}`}
                       />
                     ) : (
                       user.email
@@ -206,7 +223,7 @@ const UserTable = () => {
                         type="text"
                         value={editedUser.role}
                         onChange={e => setEditedUser({ ...editedUser, role: e.target.value })}
-                        aria-label={`Edit role of ${user.role}`}
+                        aria-label={`Edit ${user.role}`}
                       />
                     ) : (
                       user.role
